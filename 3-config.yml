@@ -1,0 +1,76 @@
+src: "~/src"
+dotfiles: "~/src/dotfiles"
+config: "~/.config"
+ghostty: "~/.config/ghostty"
+nvim: "~/.config/nvim"
+
+steps:
+  - name: Create source directory
+    command: "mkdir ~/src"
+
+  - name: Clone dotfiles
+    command: "git clone git@github.com:ayushkpai/dotfiles.git ~/src/dotfiles"
+
+  - name: Create config directory
+    command: "mkdir ~/.config"
+
+  - name: Link Ghostty configuration
+    command: "ln -s ~/src/dotfiles/ghostty ~/.config/ghostty"
+
+  - name: Link Neovim configuration
+    command: "ln -s ~/src/dotfiles/nvim ~/.config/nvim"
+
+  - name: Install Oh My Zsh
+    command: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+
+  - name: Enable zsh syntax highlighting
+    command: 'echo "source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc'
+
+  - name: Enable zsh autosuggestions
+    command: 'echo "source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc'
+
+  - name: Enable zsh history substring search
+    command: 'echo "source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh" >> ~/.zshrc'
+
+  - name: Configure Git user
+    prompt:
+      - name: Git user name
+        variable: name
+      - name: Git email
+        variable: email
+    commands:
+      - 'git config --global user.name "{{ name }}"'
+      - 'git config --global user.email "{{ email }}"'
+
+  - name: Configure Git line endings
+    command: "git config --global core.autocrlf input"
+
+  - name: Initialize rbenv
+    command: "rbenv init"
+
+  - name: Install Ruby 3.4.4
+    command: "rbenv install 3.4.4"
+
+  - name: Set Ruby 3.4.4 as global
+    command: "rbenv global 3.4.4"
+
+  - name: Install Rails 8.0.2
+    command: "gem install rails -v 8.0.2 --no-document"
+
+  - name: Install TypeScript
+    command: "sudo npm i -g typescript"
+
+  - name: Install Yeoman and VS Code generator
+    command: "npm install -g yo generator-code"
+
+  - name: Install VS Code Extension Manager
+    command: "npm install -g vsce"
+
+  - name: Install Python 3.14
+    command: "uv python install 3.14"
+
+  - name: Pin Python 3.14
+    command: "uv python pin 3.14"
+
+  - name: Install Python 3.13
+    command: "uv python install 3.13"
