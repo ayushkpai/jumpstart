@@ -1,0 +1,16 @@
+---
+- name: Macbook basic apps
+  hosts: localhost
+  connection: local
+  vars:
+    brew_apps:
+      - firefox
+      - zoom
+      - vlc
+
+  tasks:
+  - name: Install cask apps
+    homebrew_cask:
+      name: '{{ item }}'
+      state: present
+    loop: '{{ brew_apps }}'

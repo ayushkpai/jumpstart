@@ -1,0 +1,49 @@
+---
+- name: Macbook development setup
+  hosts: localhost
+  connection: local
+  vars:
+    brew_tools:
+      - git
+      - vim
+      - nvim
+      - rg
+      - bat
+      - tree
+      - tree-sitter-cli
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+      - zsh-history-substring-search
+      - uv
+      - node
+      - yarn
+      - redis
+      - mysql
+      - rbenv
+    casks:
+      - ghostty
+      - visual-studio-code
+      - dbeaver-community
+
+  tasks:
+    - name: Install basic cli tools
+      homebrew:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ brew_tools }}"
+
+    - name: Install cask tools
+      homebrew_cask:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ casks }}"
+
+    - name: Start Redis
+      community.general.homebrew_services:
+        name: redis
+        state: started
+
+    - name: Start MySQL
+      community.general.homebrew_services:
+        name: mysql
+        state: started
