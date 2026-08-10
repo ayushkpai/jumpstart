@@ -9,3 +9,10 @@ unless system("/opt/homebrew/bin/ansible --version")
   puts "Installing ansible..."
   system "/opt/homebrew/bin/brew install ansible"
 end
+
+unless Dir.exists?("/tmp/jumpstart/")
+  puts "Downloading jumpstart..."
+  system "git clone https://github.com/ayushkpai/jumpstart.git /tmp/jumpstart"
+end
+
+system "cd /tmp/jumpstart && /opt/homebrew/bin/ansible-playbook 0-test.yml"
