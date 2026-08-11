@@ -28,17 +28,11 @@ steps:
   - name: Link Neovim configuration
     command: "ln -s ~/src/dotfiles/nvim ~/.config/nvim"
 
-  - name: Install Oh My Zsh
-    command: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-
-  - name: Enable zsh syntax highlighting
-    command: 'echo "source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc'
-
-  - name: Enable zsh autosuggestions
-    command: 'echo "source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc'
-
-  - name: Enable zsh history substring search
-    command: 'echo "source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh" >> ~/.zshrc'
+  - name: symlink zshrc file
+    file:
+      src: '{{ src_dir_path }}/dotfiles/zshrc'
+      dest: '~/.zshrc'
+      state: link
 
   - name: Configure Git user
     prompt:
