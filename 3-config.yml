@@ -30,7 +30,7 @@ steps:
 
   - name: symlink zshrc file
     file:
-      src: '{{ src_dir_path }}/dotfiles/zshrc'
+      src: '{{ src }}/dotfiles/zshrc'
       dest: '~/.zshrc'
       state: link
 
