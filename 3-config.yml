@@ -5,6 +5,14 @@ ghostty: "~/.config/ghostty"
 nvim: "~/.config/nvim"
 
 steps:
+  - name: Autohide dock
+    osx_defaults:
+      domain: com.apple.dock
+      key: autohide
+      type: bool
+      value: true
+      state: present
+
   - name: Create source directory
     command: "mkdir ~/src"
 
