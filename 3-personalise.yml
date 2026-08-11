@@ -1,0 +1,70 @@
+---
+- name: Personalise setup
+  hosts: localhost
+  connection: local
+  vars:
+    src_dir_name: pai
+    src_dir_path: '{{ ansible_env.HOME }}/src/{{ src_dir_name }}'
+
+  tasks:
+    - name: Set key repeat - highest rate, lowest delay
+      osx_defaults:
+        domain: NSGlobalDomain
+        key: '{{ item.key }}'
+        type: float
+        value: '{{ item.value }}'
+        state: present
+      loop:
+        - { key: KeyRepeat, value: 2 }
+        - { key: InitialKeyRepeat, value: 15 }
+
+    - name: Autohide dock
+      osx_defaults:
+        domain: com.apple.dock
+        key: autohide
+        type: bool
+        value: true
+        state: present
+
+    - name: Create a base dir for all source code
+      file:
+        path: '{{ src_dir_path }}'
+        state: directory
+
+    - name: Clone the dotfiles repo
+      git:
+        repo: git@github.com:ayushkpai/dotfiles.git
+        dest: '{{ src_dir_path }}/dotfiles'
+
+    - name: symlink gitignore_global file
+      file:
+        src: '{{ src_dir_path }}/dotfiles/gitignore_global'
+        dest: '~/.gitignore_global'
+        state: link
+
+    - name: Configure Git user
+      prompt:
+        - name: Git user name
+          variable: name
+        - name: Git email
+          variable: email
+      commands:
+        - 'git config --global user.name "{{ name }}"'
+        - 'git config --global user.email "{{ email }}"'
+        - "git config --global core.autocrlf input"
+        - "git config --global core.excludesfile ~/.gitignore_global"
+
+    - name: symlink zshrc file
+      file:
+        src: '{{ src_dir_path }}/dotfiles/zshrc'
+        dest: '~/.zshrc'
+        state: link
+
+    - name: Setup nvim & ghostty configs
+      file:
+        src: '{{ src_dir_path }}/dotfiles/{{ item }}'
+        dest: '~/.config/{{item}}'
+        state: link
+      with_items:
+        - nvim
+        - ghostty
