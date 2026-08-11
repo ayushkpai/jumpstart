@@ -13,6 +13,17 @@ steps:
       value: true
       state: present
 
+  - name: Set key repeat - highest rate, lowest delay
+    osx_defaults:
+      domain: NSGlobalDomain
+      key: '{{ item.key }}'
+      type: float
+      value: '{{ item.value }}'
+      state: present
+    loop:
+      - { key: KeyRepeat, value: 2 }
+      - { key: InitialKeyRepeat, value: 15 }
+
   - name: Create source directory
     command: "mkdir ~/src"
 
