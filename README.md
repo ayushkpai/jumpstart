@@ -14,7 +14,7 @@ Macbook setup - zero to development
     ansible-playbook <file>
     ```
 
-- Check if you have it installed
+- If you want to just check if you have it installed
 
     ```
     ansible-playbook <file> --check
