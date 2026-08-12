@@ -19,3 +19,21 @@ Macbook setup - zero to development
     ```
     ansible-playbook <file> --check
     ```
+
+- Manual install
+
+```
+brew install rbenv
+rbenv init
+rbenv install 3.4.4
+rbenv global 3.4.4
+gem install rails -v 8.0.2 --no-document
+sudo npm i -g typescript
+brew services restart redis
+brew services start mysql
+npm install -g yo generator-code
+npm install -g vsce
+uv python install 3.14
+uv python pin 3.14
+uv python install 3.13
+```
