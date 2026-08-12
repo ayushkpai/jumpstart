@@ -2,44 +2,38 @@
 - name: Personalise setup
   hosts: localhost
   connection: local
+
   vars:
-    src_dir_name: pai
-    src_dir_path: '{{ ansible_env.HOME }}/src/{{ src_dir_name }}'
+    src_dir_name: dotfiles
+    src_dir_path: "{{ ansible_env.HOME }}/src/{{ src_dir_name }}"
 
   tasks:
+
     - name: Set key repeat - highest rate, lowest delay
       osx_defaults:
         domain: NSGlobalDomain
-        key: '{{ item.key }}'
+        key: "{{ item.key }}"
         type: float
-        value: '{{ item.value }}'
+        value: "{{ item.value }}"
         state: present
       loop:
         - { key: KeyRepeat, value: 2 }
         - { key: InitialKeyRepeat, value: 15 }
 
-    - name: Autohide dock
-      osx_defaults:
-        domain: com.apple.dock
-        key: autohide
-        type: bool
-        value: true
-        state: present
-
     - name: Create a base dir for all source code
       file:
-        path: '{{ src_dir_path }}'
+        path: "{{ ansible_env.HOME }}/src"
         state: directory
 
     - name: Clone the dotfiles repo
       git:
-        repo: git@github.com:ayushkpai/dotfiles.git
-        dest: '{{ src_dir_path }}/dotfiles'
+        repo: "git@github.com:ayushkpai/dotfiles.git"
+        dest: "{{ src_dir_path }}"
 
     - name: symlink gitignore_global file
       file:
-        src: '{{ src_dir_path }}/dotfiles/gitignore_global'
-        dest: '~/.gitignore_global'
+        src: "{{ src_dir_path }}/gitignore_global"
+        dest: "{{ ansible_env.HOME }}/.gitignore_global"
         state: link
 
     - name: Configure Git user
@@ -56,15 +50,15 @@
 
     - name: symlink zshrc file
       file:
-        src: '{{ src_dir_path }}/dotfiles/zshrc'
-        dest: '~/.zshrc'
+        src: "{{ src_dir_path }}/zshrc"
+        dest: "{{ ansible_env.HOME }}/.zshrc"
         state: link
 
     - name: Setup nvim & ghostty configs
       file:
-        src: '{{ src_dir_path }}/dotfiles/{{ item }}'
-        dest: '~/.config/{{item}}'
+        src: "{{ src_dir_path }}/{{ item }}"
+        dest: "{{ ansible_env.HOME }}/.config/{{ item }}"
         state: link
-      with_items:
+      loop:
         - nvim
         - ghostty
