@@ -10,7 +10,7 @@ unless system("/opt/homebrew/bin/ansible --version")
   system "/opt/homebrew/bin/brew install ansible"
 end
 
-unless Dir.exists?("/tmp/jumpstart/")
+unless Dir.exist?("/tmp/jumpstart/")
   puts "Downloading jumpstart..."
   system "git clone https://github.com/ayushkpai/jumpstart.git /tmp/jumpstart"
 end
