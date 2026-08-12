@@ -36,4 +36,5 @@ Macbook setup - zero to development
   uv python pin 3.14
   uv python install 3.13
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  gh auth login
   ```
